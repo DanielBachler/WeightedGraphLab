@@ -1,11 +1,10 @@
 package com.company;
 
-import com.sun.deploy.util.ArrayUtil;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 
@@ -14,10 +13,13 @@ public class Main {
     //Scanner for input
     public static Scanner readInput;
     //Matrix
-    public static LinkedList<Character[]> matrix = new LinkedList<>();
+    public static LinkedList<Node[]> matrix = new LinkedList<>();
+    //Char array of labels
+    public static char[] labels;
 
     public static void main(String[] args) {
-
+        getInput();
+        printMatrix();
     }
 
     //Gets the matrix input from the specified file name inputFile
@@ -29,16 +31,40 @@ public class Main {
         } catch(FileNotFoundException e) {
             System.out.println("File not found" + e);
         }
-        //Read input from file and creates a matrix
+        //Gets first line of values, and reads them into a char array
+        String temp = readInput.nextLine();
+        labels = temp.toCharArray();
+        //The size of the array
+        int size = labels.length;
+        //Reads through entire file
         while(readInput.hasNextLine()) {
-            //Gets the line from the input file
+            //Creates an array of nodes with the correct length
+            Node[] toAdd = new Node[size];
+            //Gets the next line
             String line = readInput.nextLine();
-            //Using wizardry we convert from char[] to Character[]
-            //This is a hack solution I found on stack overflow as I could not think of a good way to do the conversion
-            //Also I figure this part is unimportant since its not the focus of the lab
-            Character[] bigBoi = line.chars().mapToObj(c -> (char)c).toArray(Character[]::new);
-            //Adds temp to the matrix
-            matrix.add(bigBoi);
+            //String tokenizer to cut spaces and make my life easier
+            StringTokenizer tokenizer = new StringTokenizer(line, " ");
+            //Throws out the first value as it is a known label
+            String garbage = tokenizer.nextToken();
+            //Runs once for each value in the row, assumed that rows are all same size
+            for(int i = 0; i < size; i++) {
+                //Creates the node
+                Node addMe = new Node(tokenizer.nextToken());
+                //Adds it to the temp array
+                toAdd[i] = addMe;
+            }
+            //Adds the array to the matrix
+            matrix.add(toAdd);
+        }
+    }
+
+    //Prints the matrix
+    public static void printMatrix() {
+        for(Node[] nA: matrix) {
+            for(Node n: nA) {
+                System.out.print(n.getValue()[1] + " ");
+            }
+            System.out.println();
         }
     }
 }
