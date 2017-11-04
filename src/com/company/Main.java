@@ -62,7 +62,7 @@ public class Main {
     public static void printMatrix() {
         for(Node[] nA: matrix) {
             for(Node n: nA) {
-                System.out.print(n.getValue()[1] + " ");
+                System.out.printf("%4s", n.getValue()[1]);
             }
             System.out.println();
         }
