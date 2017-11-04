@@ -16,6 +16,8 @@ public class Main {
     public static LinkedList<Node[]> matrix = new LinkedList<>();
     //Char array of labels
     public static char[] labels;
+    //sorted array
+    public static int[] wieght;
 
     public static void main(String[] args) {
         getInput();
@@ -66,6 +68,25 @@ public class Main {
                 System.out.printf("%4s", n.getValue()[1]);
             }
             System.out.println();
+        }
+    }
+
+    public static void kruskals(){
+        String[] answer;
+
+        //find smallest edge, check for loop, if good add to list
+    }
+
+    public static void sortByWieght(){
+        int i = 0;
+        for (Node[] nA: matrix){
+            for(Node n: nA) {
+                if (n.getValue()[0].equals("int") && !n.getValue()[1].equals("0")){
+
+                    i++;
+                }
+                ;
+            }
         }
     }
 }
