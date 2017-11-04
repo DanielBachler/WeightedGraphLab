@@ -56,6 +56,7 @@ public class Main {
             //Adds the array to the matrix
             matrix.add(toAdd);
         }
+        readInput.close();
     }
 
     //Prints the matrix
