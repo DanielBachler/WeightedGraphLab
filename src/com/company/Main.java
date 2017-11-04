@@ -80,7 +80,7 @@ public class Main {
     public static void sortByWieght(){
         int i = 0;
         for (Node[] nA: matrix){
-            for(Node n: nA) {
+            for(Node n: nA) { //delete this comment, used for push
                 if (n.getValue()[0].equals("int") && !n.getValue()[1].equals("0")){
 
                     i++;
