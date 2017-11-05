@@ -3,6 +3,7 @@ package com.company;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -17,11 +18,11 @@ public class Main {
     //Char array of labels
     public static char[] labels;
     //sorted array
-    public static int[] wieght;
+    public static int[] weight;
 
     public static void main(String[] args) {
         getInput();
-        printMatrix();
+        primsAlgorithm();
     }
 
     //Gets the matrix input from the specified file name inputFile
@@ -51,7 +52,7 @@ public class Main {
             //Runs once for each value in the row, assumed that rows are all same size
             for(int i = 0; i < size; i++) {
                 //Creates the node
-                Node addMe = new Node(tokenizer.nextToken());
+                Node addMe = new Node(tokenizer.nextToken(), i);
                 //Adds it to the temp array
                 toAdd[i] = addMe;
             }
@@ -77,15 +78,52 @@ public class Main {
         //find smallest edge, check for loop, if good add to list
     }
 
+    //Creates a minimum spanning tree using prim's algorithm
+    public static void primsAlgorithm() {
+        //The array to hold the final Minimum Spanning Tree
+        LinkedList<Integer> mst = new LinkedList<>();
+        //Counter for mst
+        int i = 0;
+        int[] inMST = new int[labels.length];
+        //Creates a priority queue for sorting the vertices
+        PriorityQueue<Node> queue = new PriorityQueue<>();
+        int current = 0;
+        boolean spanning = false;
+        while(!spanning) {
+            mst.add(current);
+            inMST[current] = 1;
+            //Starting with the first Node, gets and sorts all connected vertices, except self connections equal to 0
+            for(Node n: matrix.get(current)) {
+                if(n.getValue()[0].equals("int")) {
+                    if(Integer.parseInt(n.getValue()[1]) != 0)
+                        queue.add(n);
+                }
+            }
+            //Gets the next node
+            current = queue.remove().spot;
+            //Keeps getting new connections until a new one is found
+            while(inMST[current] == 1) {
+                if(!queue.isEmpty())
+                    current = queue.remove().spot;
+                else {
+                    spanning = true;
+                    break;
+                }
+            }
+            queue.clear();
+        }
+        for(int n : mst) {
+            System.out.printf("%c ", labels[n]);
+        }
+    }
+
     public static void sortByWieght(){
         int i = 0;
         for (Node[] nA: matrix){
             for(Node n: nA) { //delete this comment, used for push
                 if (n.getValue()[0].equals("int") && !n.getValue()[1].equals("0")){
 
-                    i++;
                 }
-                ;
             }
         }
     }

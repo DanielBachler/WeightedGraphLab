@@ -1,6 +1,6 @@
 abcde
-a 0 50 INF 80 INF
-b INF 0 60 90 INF
-c INF INF 0 INF 40
-d INF INF 20 0 70
-e INF 50 INF INF 0
+a 0   50 INF 80 INF
+b 50  0  60  90 50
+c INF 60 0   20 40
+d 80  90 20  0  70
+e INF 50 40  70 0
