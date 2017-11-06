@@ -22,15 +22,17 @@ public class Main {
         primsAlgorithm();
         kruskals();
         getInput();
+        System.out.println();
+        warshalls();
     }
 
     //Gets the matrix input from the specified file name inputFile
     public static void getInput() {
         //Finds file and assigns scanner to the file
-        try{
+        try {
             File input = new File(inputFile);
             readInput = new Scanner(input);
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             System.out.println("File not found" + e);
         }
         //Gets first line of values, and reads them into a char array
@@ -40,7 +42,7 @@ public class Main {
         int size = labels.length;
         //Reads through entire file
         int j = 0;
-        while(readInput.hasNextLine()) {
+        while (readInput.hasNextLine()) {
             //Creates an array of nodes with the correct length
             Node[] toAdd = new Node[size];
             //Gets the next line
@@ -50,7 +52,7 @@ public class Main {
             //Throws out the first value as it is a known label
             String garbage = tokenizer.nextToken();
             //Runs once for each value in the row, assumed that rows are all same size
-            for(int i = 0; i < size; i++) {
+            for (int i = 0; i < size; i++) {
                 //Creates the node
                 Node addMe = new Node(tokenizer.nextToken(), i, j);
                 //Adds it to the temp array
@@ -65,37 +67,38 @@ public class Main {
 
     //Prints the matrix
     public static void printMatrix() {
-        for(Node[] nA: matrix) {
-            for(Node n: nA) {
+        for (Node[] nA : matrix) {
+            for (Node n : nA) {
                 System.out.printf("%4s", n.getValue()[1]);
             }
             System.out.println();
         }
+
     }
 
-    public static void kruskals(){
+    public static void kruskals() {
         sortByWeight();
         System.out.println();
-        for(int weight: weights) {
-            System.out.print(weight+ " ");
+        for (int weight : weights) {
+            System.out.print(weight + " ");
         }
-        char[] mst = new char[labels.length*2];
+        char[] mst = new char[labels.length * 2];
         int j = 0;
-        for(int i = 0; i < weights.length; i++) {
+        for (int i = 0; i < weights.length; i++) {
             Node node = findMyDaddy(weights[i]);
             int contains = 0;
-            for(int k = 0; k < labels.length * 2; k++) {
-                if(mst[k] == labels[node.i] || mst[k] == labels[node.j]) {
+            for (int k = 0; k < labels.length * 2; k++) {
+                if (mst[k] == labels[node.i] || mst[k] == labels[node.j]) {
                     contains++;
                 }
             }
-            if(contains < 2) {
+            if (contains < 2) {
                 mst[j++] = labels[node.i];
                 mst[j++] = labels[node.j];
             }
         }
         System.out.println();
-        for(char c: mst) {
+        for (char c : mst) {
             System.out.print(c + " ");
         }
     }
@@ -111,21 +114,21 @@ public class Main {
         PriorityQueue<Node> queue = new PriorityQueue<>();
         int current = 0;
         boolean spanning = false;
-        while(!spanning) {
+        while (!spanning) {
             mst.add(current);
             inMST[current] = 1;
             //Starting with the first Node, gets and sorts all connected vertices, except self connections equal to 0
-            for(Node n: matrix.get(current)) {
-                if(n.getValue()[0].equals("int")) {
-                    if(Integer.parseInt(n.getValue()[1]) != 0)
+            for (Node n : matrix.get(current)) {
+                if (n.getValue()[0].equals("int")) {
+                    if (Integer.parseInt(n.getValue()[1]) != 0)
                         queue.add(n);
                 }
             }
             //Gets the next node
             current = queue.remove().i;
             //Keeps getting new connections until a new one is found
-            while(inMST[current] == 1) {
-                if(!queue.isEmpty())
+            while (inMST[current] == 1) {
+                if (!queue.isEmpty())
                     current = queue.remove().i;
                 else {
                     spanning = true;
@@ -134,28 +137,42 @@ public class Main {
             }
             queue.clear();
         }
-        for(int n : mst) {
+        for (int n : mst) {
             System.out.printf("%c ", labels[n]);
         }
     }
 
     public static void warshalls() {
-
+        for (int k = 0; k < labels.length; k++) {
+            for (int i = 0; i < labels.length; i++) {
+                for (int j = 0; j < labels.length; j++) {
+                    Node one = matrix.get(i)[j];
+                    Node two = matrix.get(i)[k];
+                    Node three = matrix.get(k)[j];
+                    if (one.type.equals("int") && two.type.equals("int") && three.type.equals("int"))
+                        if (one.valueInt != 0 && two.valueInt != 0 && three.valueInt != 0)
+                            if (one.valueInt > two.valueInt + three.valueInt) {
+                                one.valueInt = two.valueInt + three.valueInt;
+                                printMatrix();
+                            }
+                }
+            }
+        }
     }
 
-    public static void sortByWeight(){
+    public static void sortByWeight() {
         int k = 0;
-        weights = new int[labels.length*labels.length];
-        for (int i = labels.length-2; i >= 0; i--) {
-            for(int j = labels.length-1; j > i; j--) {
+        weights = new int[labels.length * labels.length];
+        for (int i = labels.length - 2; i >= 0; i--) {
+            for (int j = labels.length - 1; j > i; j--) {
                 //If the spot in the matrix is a number
-                if(matrix.get(i)[j].getValue()[0].equals("int")) {
+                if (matrix.get(i)[j].getValue()[0].equals("int")) {
                     weights[k++] = matrix.get(i)[j].valueInt;
                 }
             }
         }
         int[] temp = new int[k];
-        for(int i = 0; i < k; i++) {
+        for (int i = 0; i < k; i++) {
             temp[i] = weights[i];
         }
         Arrays.sort(temp);
@@ -164,17 +181,17 @@ public class Main {
 
     public static Node findMyDaddy(int weight) {
         Node daddy = null;
-        for(int i = labels.length-2; i >= 0; i--) {
+        for (int i = labels.length - 2; i >= 0; i--) {
             boolean stop = false;
-            for(int j = labels.length-1; j > i; j--) {
-                if(matrix.get(i)[j].valueInt == weight) {
+            for (int j = labels.length - 1; j > i; j--) {
+                if (matrix.get(i)[j].valueInt == weight) {
                     daddy = matrix.get(i)[j];
                     daddy.valueInt = 0;
                     stop = true;
                     break;
                 }
             }
-            if(stop)
+            if (stop)
                 break;
         }
         return daddy;
