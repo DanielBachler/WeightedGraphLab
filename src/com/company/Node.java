@@ -2,19 +2,20 @@ package com.company;
 
 public class Node implements Comparable<Node>{
     String type;
-    int valueInt = 0;
+    int valueInt;
     String valueString;
     int i;
     int j;
 
 
     public Node(String input, int i, int j) {
-        try {
-            type = "int";
-            valueInt = Integer.parseInt(input);
-        } catch (NumberFormatException n) {
+        if(input.equals("INF")) {
+            valueInt = 10000000;
             type = "string";
-            valueString = input;
+            valueString = "INF";
+        } else {
+            valueInt = Integer.parseInt(input);
+            type = "int";
         }
         this.i = i;
         this.j = j;

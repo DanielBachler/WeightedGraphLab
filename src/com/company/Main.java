@@ -21,9 +21,12 @@ public class Main {
         getInput();
         primsAlgorithm();
         kruskals();
-        getInput();
+        //getInput();
         System.out.println();
+        //getInput();
         warshalls();
+        mirror();
+        printMatrix();
     }
 
     //Gets the matrix input from the specified file name inputFile
@@ -73,6 +76,7 @@ public class Main {
             }
             System.out.println();
         }
+
 
     }
 
@@ -149,12 +153,11 @@ public class Main {
                     Node one = matrix.get(i)[j];
                     Node two = matrix.get(i)[k];
                     Node three = matrix.get(k)[j];
-                    if (one.type.equals("int") && two.type.equals("int") && three.type.equals("int"))
-                        if (one.valueInt != 0 && two.valueInt != 0 && three.valueInt != 0)
-                            if (one.valueInt > two.valueInt + three.valueInt) {
-                                one.valueInt = two.valueInt + three.valueInt;
-                                printMatrix();
-                            }
+                    if (one.valueInt > two.valueInt + three.valueInt)
+                    {
+                        one.valueInt = two.valueInt + three.valueInt;
+                        printMatrix();
+                    }
                 }
             }
         }
@@ -195,5 +198,14 @@ public class Main {
                 break;
         }
         return daddy;
+    }
+
+    public static void mirror() {
+        for(int i = 0; i < labels.length; i++) {
+            for(int j = 0; j <= i; j++) {
+                Node temp = matrix.get(j)[i];
+                temp.valueInt = matrix.get(i)[j].valueInt;
+            }
+        }
     }
 }
