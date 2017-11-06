@@ -2,11 +2,13 @@ package com.company;
 
 public class Node implements Comparable<Node>{
     String type;
-    int valueInt;
+    int valueInt = 0;
     String valueString;
-    int spot;
+    int i;
+    int j;
 
-    public Node(String input, int spot) {
+
+    public Node(String input, int i, int j) {
         try {
             type = "int";
             valueInt = Integer.parseInt(input);
@@ -14,7 +16,8 @@ public class Node implements Comparable<Node>{
             type = "string";
             valueString = input;
         }
-        this.spot = spot;
+        this.i = i;
+        this.j = j;
     }
 
     //Gets the value and returns it.  Format is a string array, first value is type second value is value
@@ -44,9 +47,9 @@ public class Node implements Comparable<Node>{
     //Returns 0 if non-functioning
     public int compareTo(Node n) {
         //Checks if both nodes are int nodes
-        if(this.getValue()[0].equals("int") && n.getValue()[0].equals("int")) {
-            int one = Integer.parseInt(this.getValue()[1]);
-            int two = Integer.parseInt(n.getValue()[1]);
+        if(this.type.equals("int") && n.type.equals("int")) {
+            int one = this.valueInt;
+            int two = n.valueInt;
             if(one > two) {
                 return 1;
             } else if(one < two) {
